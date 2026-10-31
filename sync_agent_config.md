@@ -188,10 +188,12 @@ CONT_TAIL = re.compile(
     r"继续(做|看|处理|验证|跑|检查|实现|修复|写)?[。.!！]?$|"
     r"接下来(我|就|会|将)|下面(我|就)|接着(做|来|执行|验证)|"
     r"现在(就|来|开始)|"
-    r"(然后|随后|下一步)[^。！？!?]{0,90}[。！？!?]?\s*$|"
     r"Let me continue|I'?ll continue|Continuing with|Now I'?ll)",
     re.IGNORECASE,
 )
+# 弱续跑语：只在"短消息 + 结尾从句 + 非引用提及"时才算，避免总结里提到「然后…」被误判
+CONT_WEAK = re.compile(r"(然后|随后|下一步)[^。！？!?]{0,60}[。…!！]?\s*$")
+QUOTED_WEAK = re.compile(r"[「“\"'](然后|随后|下一步)")
 DONE_MARKERS = ("TASK_COMPLETE", "任务已完成", "全部完成", "收工")
 
 
@@ -390,6 +392,8 @@ def main() -> int:
     tail = text.strip()[-160:]
     short = len(text.strip()) < 900
     cont_tail = bool(short and tail and CONT_TAIL.search(tail))
+    if not cont_tail and len(text.strip()) < 600 and CONT_WEAK.search(tail) and not QUOTED_WEAK.search(tail):
+        cont_tail = True
     awaiting_user = bool(re.search(r"[?？]\s*$", text.strip()[-120:]))
     done = any(m in text for m in DONE_MARKERS)
 
