@@ -39,6 +39,13 @@ CONT_TAIL = re.compile(
 # 弱续跑语：只在"短消息 + 结尾从句 + 非引用提及"时才算，避免总结里提到「然后…」被误判
 CONT_WEAK = re.compile(r"(然后|随后|下一步)[^。！？!?]{0,60}[。…!！]?\s*$")
 QUOTED_WEAK = re.compile(r"[「“\"'](然后|随后|下一步)")
+# 用户执行意图：用户消息像"继续/推进/优化/修复/看/读/做/改…"这类动作指令（问句除外）
+USER_ACTION = re.compile(r"(继续|推进|优化|修复|解决|实现|调整|处理|清理|检查|加上|加个|删|改|做|搞|看|读|开始|帮我|给我|设计|跑|验证|试)")
+# 动作宣告：先看/我要/我来/让我/开始/准备… 且本轮一个工具都没调 → 判定为"只说不做"
+CONT_ACTION = re.compile(
+    r"(先(看|检查|做|处理|改|写|跑|验证|确认|去|试试)|我要|我来|让我|开始|准备|着手)"
+    r"[^。！？!?]{0,80}[。！？!?]?\s*$"
+)
 DONE_MARKERS = ("TASK_COMPLETE", "任务已完成", "全部完成", "收工")
 
 
@@ -131,6 +138,46 @@ def replay_plan(lines: list) -> list:
                                 break
                         break
     return plan
+
+
+def last_user_text(lines: list) -> str:
+    for i in range(len(lines) - 1, -1, -1):
+        d = lines[i]
+        if d.get("type") != "user":
+            continue
+        c = d.get("message", {}).get("content")
+        if isinstance(c, list) and c and all(isinstance(b, dict) and b.get("type") == "tool_result" for b in c):
+            continue
+        if isinstance(c, str):
+            return c
+        out = []
+        for b in c or []:
+            if isinstance(b, dict) and b.get("type") == "text":
+                out.append(b.get("text", ""))
+        return "\n".join(out)
+    return ""
+
+
+def turn_tool_count(lines: list) -> int:
+    """统计最后一条真实用户消息之后的 tool_use 数量（tool_result 回调不算用户消息）。"""
+    last_user = -1
+    for i in range(len(lines) - 1, -1, -1):
+        d = lines[i]
+        if d.get("type") != "user":
+            continue
+        c = d.get("message", {}).get("content")
+        if isinstance(c, list) and c and all(isinstance(b, dict) and b.get("type") == "tool_result" for b in c):
+            continue
+        last_user = i
+        break
+    n = 0
+    for d in lines[last_user + 1:]:
+        if d.get("type") != "assistant":
+            continue
+        for b in d.get("message", {}).get("content", []) or []:
+            if isinstance(b, dict) and b.get("type") == "tool_use":
+                n += 1
+    return n
 
 
 def last_text_from_transcript(lines: list) -> str:
@@ -236,12 +283,22 @@ def main() -> int:
     pending = sum(1 for s in plan if s in ("pending", "in_progress"))
     tail = text.strip()[-160:]
     short = len(text.strip()) < 900
+    awaiting_user = bool(re.search(r"[?？]\s*$", text.strip()[-120:]))
+    done = any(m in text for m in DONE_MARKERS)
     cont_tail = bool(short and tail and CONT_TAIL.search(tail))
     if not cont_tail and len(text.strip()) < 600 and CONT_WEAK.search(tail) and not QUOTED_WEAK.search(tail):
         cont_tail = True
-    awaiting_user = bool(re.search(r"[?？]\s*$", text.strip()[-120:]))
-    done = any(m in text for m in DONE_MARKERS)
-
+    # 只说不做：短消息 + 本轮零工具调用 + 结尾在宣告动作 → 打回要求立即动手
+    if not cont_tail and len(text.strip()) < 600 and transcript_path:
+        lines_all = read_transcript(transcript_path)
+        zero_tools = turn_tool_count(lines_all) == 0
+        user_text = last_user_text(lines_all).strip()
+        if CONT_ACTION.search(tail) and not QUOTED_WEAK.search(tail) and zero_tools:
+            cont_tail = True
+        # 意图判定：用户下达的是执行指令、不是问句；本轮零工具调用；回复又短 → 视为"只说不做"
+        if not cont_tail and zero_tools and user_text and not re.search(r"[?？]\s*$", user_text) \
+                and USER_ACTION.search(user_text) and not awaiting_user and not done:
+            cont_tail = True
     incomplete = (pending > 0 or cont_tail) and not awaiting_user and not done
 
     if incomplete and blocks < MAX_BLOCKS:
