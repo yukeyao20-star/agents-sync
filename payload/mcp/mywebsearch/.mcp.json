@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "mywebsearch": {
+      "command": "/Users/lei/agents/virtualenvs/agent-shared-test/bin/python",
+      "args": ["/Users/lei/agents/MCP/mywebsearch/server.py"],
+      "env": {
+        "PYTHONUNBUFFERED": "1"
+      }
+    }
+  }
+}

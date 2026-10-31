@@ -1,0 +1,100 @@
+{
+  "env": {
+    "CLAUDE_CODE_MODEL_CAPABILITIES": "${CLAUDE_CODE_MODEL_CAPABILITIES}",
+    "CLAUDE_CODE_MAX_CONTEXT_TOKENS": "${CLAUDE_CODE_MAX_CONTEXT_TOKENS}",
+    "ANTHROPIC_AUTH_TOKEN": "${ANTHROPIC_AUTH_TOKEN}",
+    "ANTHROPIC_BASE_URL": "https://amr-link.open-design.ai",
+    "ANTHROPIC_DEFAULT_FABLE_MODEL": "deepseek-v4-pro[1M]",
+    "ANTHROPIC_DEFAULT_FABLE_MODEL_NAME": "deepseek-v4-pro",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "mimo-v2.6-flash[1M]",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "glm-5.3-flash[1M]",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL_NAME": "glm-5.3-flash",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "deepseek-v4.1-flash[1M]",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL_NAME": "deepseek-v4.1-flash",
+    "ANTHROPIC_MODEL": "deepseek-v4.1-flash",
+    "DASHSCOPE_BASE_URL": "${DASHSCOPE_BASE_URL}",
+    "NODE_EXTRA_CA_CERTS": "${NODE_EXTRA_CA_CERTS}",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL_NAME": "mimo-v2.6-flash",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "deepseek-v4.1-flash[1M]",
+    "CLAUDE_CODE_AUTO_MODE_SERVER": "0"
+  },
+  "includeCoAuthoredBy": false,
+  "permissions": {
+    "defaultMode": "bypassPermissions"
+  },
+  "sandbox": {
+    "enabled": false,
+    "allowUnsandboxedCommands": true
+  },
+  "modelSettings": {
+    "deepseek-v4.1-flash": {
+      "autoCompactWindow": 900000
+    }
+  },
+  "autoCompactWindow": 900000,
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "dark",
+  "enabledPlugins": {
+    "swift-lsp@claude-plugins-official": true
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/sh ${HOME}/.claude/hooks/keep_working.sh --session-start",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/sh ${HOME}/.claude/hooks/keep_working.sh",
+            "timeout": 25
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "mcp__ccd_turn__wrap_up",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/sh ${HOME}/.claude/hooks/keep_working.sh",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "mcp__ccd_turn__update_plan",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/sh ${HOME}/.claude/hooks/keep_working.sh",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/sh ${HOME}/.claude/hooks/keep_working.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

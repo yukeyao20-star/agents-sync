@@ -24,6 +24,26 @@ git clone https://github.com/yukeyao20-star/agents-sync.git ~/agents/sync
 
 <https://yukeyao.sbs/agents/sync_agent_config.md>
 
+## 仓库自带全部文件（只需 clone，无需手动传文件）
+
+```
+payload/
+├── agent.md                      → 拷到 ~/agents/agent.md
+├── claude/
+│   ├── CLAUDE.md                 → ~/.claude/CLAUDE.md
+│   ├── settings.example.json     → 参考/合并进 ~/.claude/settings.json（已脱敏）
+│   └── hooks/keep_working.{py,sh}→ ~/.claude/hooks/
+├── mcp/
+│   ├── sync.py                   → ~/agents/MCP/sync.py（MCP 分发器）
+│   ├── mywebsearch/              → 完整源码（自建搜索 MCP）
+│   ├── scope-recall/             → 配置/hooks/skills（代码见上游 repo）
+│   ├── mcp-server-commands.mcp.json
+│   └── davinci-resolve-mcp.mcp.json + INSTALL.md（上游 repo 安装说明）
+└── skills/                       → 四个技能完整目录，拷到 ~/agents/skills/
+```
+
+其他设备 clone 后不需要你从这台机器手动拷任何文件；让本机 Agent 按文档把 `payload/` 里的文件放到对应位置并适配路径即可。
+
 ## 同步是怎么工作的
 
 | 方向 | 做法 |

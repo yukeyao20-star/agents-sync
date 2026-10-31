@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "scope-recall": {
+      "args": [
+        "-I",
+        "-B",
+        "-m",
+        "scope_recall.adapters.codex.mcp_entry",
+        "--config",
+        "/Users/lei/agents/scope_recall/instance/codex-installation.json",
+        "--workspace",
+        "/Users/lei/Documents",
+        "--env-file",
+        "/Users/lei/agents/scope_recall/instance/embedding.env"
+      ],
+      "command": "/Users/lei/agents/virtualenvs/agent-shared-test/bin/python"
+    }
+  }
+}

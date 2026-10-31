@@ -20,7 +20,7 @@
 
 ## 1. 同步机制
 
-- **源文件**：`~/agents/sync/sync_agent_config.md`。
+- **源文件**：`~/agents/sync/sync_agent_config.md`；**同仓库 `payload/` 自带全部可安装文件**（agent.md、CLAUDE.md、hooks、settings 示例、MCP 定义与源码、skills），clone 即可用，无需手工传文件。
 - **主仓（所有设备）**：GitHub **公开**仓库 `https://github.com/yukeyao20-star/agents-sync`（`git clone https://github.com/yukeyao20-star/agents-sync.git`，无需凭据即可读取；推送需要该账号权限）。
 - **备份（可选，仅本机可推）**：`root@jpvps:/root/repos/agents-sync.git`（jpvps = 64.83.53.106）。日常以 GitHub 为准。
 - **只读镜像（可选，便于浏览器直接查看）**：`https://yukeyao.sbs/agents/sync_agent_config.md`（域名 VPS + Cloudflare）。日常同步以 GitHub 仓库为准。
@@ -547,7 +547,7 @@ exit 0
 
 ### 2.4 MCP 服务器
 
-统一放在 `~/agents/MCP/<server>/`，各自带 `.mcp.json`；`~/agents/MCP/sync.py` 负责分发到各 agent。
+统一放在 `~/agents/MCP/<server>/`，各自带 `.mcp.json`；`~/agents/MCP/sync.py` 负责分发到各 agent。仓库副本在 `payload/mcp/`（mywebsearch 为完整源码；scope-recall 为配置；davinci 见上游安装说明）。
 
 | server | 运行时 | 关键点 |
 |---|---|---|
@@ -749,7 +749,7 @@ exit 0
 
 ### 2.5 Skills
 
-- 共享源：`~/agents/skills/`（diagram-design、drawio、drawio-academic-skills、scholar-slides）；
+- 共享源：`~/agents/skills/`（diagram-design、drawio、drawio-academic-skills、scholar-slides）；仓库副本在 `payload/skills/`（完整目录）；
 - Claude Code 侧：`~/.claude/skills/` 同名技能；
 - 其他 agent 由各自技能目录或 `~/agents/MCP/sync.py` 分发。
 

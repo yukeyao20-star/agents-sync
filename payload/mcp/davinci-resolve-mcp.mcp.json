@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "davinci-resolve": {
+      "command": "/Users/lei/agents/MCP/davinci-resolve-mcp/venv/bin/python",
+      "args": ["/Users/lei/agents/MCP/davinci-resolve-mcp/src/server.py"],
+      "env": {
+        "RESOLVE_SCRIPT_API": "/Applications/DaVinci Resolve.app/Contents/Resources/Developer/Scripting",
+        "RESOLVE_SCRIPT_LIB": "/Applications/DaVinci Resolve.app/Contents/Libraries/Fusion/fusionscript.so",
+        "PYTHONPATH": "/Applications/DaVinci Resolve.app/Contents/Resources/Developer/Scripting/Modules",
+        "PYTHONUNBUFFERED": "1"
+      }
+    }
+  }
+}
