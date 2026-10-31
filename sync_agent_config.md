@@ -21,15 +21,18 @@
 ## 1. 同步机制
 
 - **源文件**：`~/agents/sync/sync_agent_config.md`。
-- **远端主仓**：`root@jpvps:/root/repos/agents-sync.git`（jpvps = 64.83.53.106；域名 VPS 的 TCP 从本机被阻断，不可用作主仓）。
-- **可选镜像**：GitHub 私有仓库；域名 VPS 可在 Cloudflare 后挂只读副本。
+- **主仓（所有设备）**：GitHub 私有仓库 `git@github.com:yukeyao20-star/agents-sync.git`（其他设备只要有该账号的 GitHub 权限即可 clone/push，不需要 VPS SSH）。
+- **备份（仅本机可推）**：`root@jpvps:/root/repos/agents-sync.git`（jpvps = 64.83.53.106，经字节跳板或直连；域名 VPS 的 TCP 从国内被阻断）。
+- **只读镜像（任何设备可直接 curl）**：`https://yukeyao.sbs/agents/sync_agent_config.md`（域名 VPS + Cloudflare；无密钥，可直接阅读，用于没有 git 凭据的设备引导）。
 - **流程**：
   - 本机改动 → 更新本 md → `git add/commit/push`；
   - 其他设备 → `git pull` → agent 阅读本 md → 本机适配 → 若产生本机差异，更新 §7 并 push 回来；
   - 冲突以"最新一次人工确认"为准，不确定就保留两侧并询问用户。
 - **新设备初始化**：
   ```bash
-  git clone root@jpvps:/root/repos/agents-sync.git ~/agents/sync
+  git clone git@github.com:yukeyao20-star/agents-sync.git ~/agents/sync
+  # 或没有 git 凭据时直接取只读镜像：
+  # curl -fsSL https://yukeyao.sbs/agents/sync_agent_config.md
   ```
   随后让本机 agent 阅读 `~/agents/sync/sync_agent_config.md` 并按 §3 适配。
 
