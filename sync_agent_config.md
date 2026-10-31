@@ -22,8 +22,8 @@
 
 - **源文件**：`~/agents/sync/sync_agent_config.md`。
 - **主仓（所有设备）**：GitHub **公开**仓库 `https://github.com/yukeyao20-star/agents-sync`（`git clone https://github.com/yukeyao20-star/agents-sync.git`，无需凭据即可读取；推送需要该账号权限）。
-- **备份（仅本机可推）**：`root@jpvps:/root/repos/agents-sync.git`（jpvps = 64.83.53.106，经字节跳板或直连；域名 VPS 的 TCP 从国内被阻断）。
-- **只读镜像（任何设备可直接 curl）**：`https://yukeyao.sbs/agents/sync_agent_config.md`（域名 VPS + Cloudflare；无密钥，可直接阅读，用于没有 git 凭据的设备引导）。
+- **备份（可选，仅本机可推）**：`root@jpvps:/root/repos/agents-sync.git`（jpvps = 64.83.53.106）。日常以 GitHub 为准。
+- **只读镜像（可选，便于浏览器直接查看）**：`https://yukeyao.sbs/agents/sync_agent_config.md`（域名 VPS + Cloudflare）。日常同步以 GitHub 仓库为准。
   - 本机更新镜像（域名 VPS 的 SSH 从国内被墙，经 Japan VPS 跳板）：
     ```bash
     scp -J root@64.83.53.106 ~/agents/sync/sync_agent_config.md root@107.173.70.200:/var/www/game/agents/
