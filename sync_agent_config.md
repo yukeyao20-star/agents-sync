@@ -24,6 +24,10 @@
 - **主仓（所有设备）**：GitHub 私有仓库 `git@github.com:yukeyao20-star/agents-sync.git`（其他设备只要有该账号的 GitHub 权限即可 clone/push，不需要 VPS SSH）。
 - **备份（仅本机可推）**：`root@jpvps:/root/repos/agents-sync.git`（jpvps = 64.83.53.106，经字节跳板或直连；域名 VPS 的 TCP 从国内被阻断）。
 - **只读镜像（任何设备可直接 curl）**：`https://yukeyao.sbs/agents/sync_agent_config.md`（域名 VPS + Cloudflare；无密钥，可直接阅读，用于没有 git 凭据的设备引导）。
+  - 本机更新镜像（域名 VPS 的 SSH 从国内被墙，经 Japan VPS 跳板）：
+    ```bash
+    scp -J root@64.83.53.106 ~/agents/sync/sync_agent_config.md root@107.173.70.200:/var/www/game/agents/
+    ```
 - **流程**：
   - 本机改动 → 更新本 md → `git add/commit/push`；
   - 其他设备 → `git pull` → agent 阅读本 md → 本机适配 → 若产生本机差异，更新 §7 并 push 回来；
