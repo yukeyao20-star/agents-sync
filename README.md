@@ -24,6 +24,10 @@ git clone https://github.com/yukeyao20-star/agents-sync.git ~/agents/sync
 
 <https://yukeyao.sbs/agents/sync_agent_config.md>
 
+## 本机 ~/agents 文件树
+
+完整目录结构与每项用途见 [FILE_TREE.md](FILE_TREE.md)；`~/agents` 中可复用的部分都已收进本仓库的 `payload/`。
+
 ## 仓库自带全部文件（只需 clone，无需手动传文件）
 
 ```
