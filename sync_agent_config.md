@@ -21,7 +21,7 @@
 ## 1. 同步机制
 
 - **源文件**：`~/agents/sync/sync_agent_config.md`。
-- **远端主仓**：`git@jpvps:~/repos/agents-sync.git`（jpvps = 64.83.53.106；域名 VPS 的 TCP 从本机被阻断，不可用作主仓）。
+- **远端主仓**：`root@jpvps:/root/repos/agents-sync.git`（jpvps = 64.83.53.106；域名 VPS 的 TCP 从本机被阻断，不可用作主仓）。
 - **可选镜像**：GitHub 私有仓库；域名 VPS 可在 Cloudflare 后挂只读副本。
 - **流程**：
   - 本机改动 → 更新本 md → `git add/commit/push`；
@@ -29,7 +29,7 @@
   - 冲突以"最新一次人工确认"为准，不确定就保留两侧并询问用户。
 - **新设备初始化**：
   ```bash
-  git clone git@jpvps:~/repos/agents-sync.git ~/agents/sync
+  git clone root@jpvps:/root/repos/agents-sync.git ~/agents/sync
   ```
   随后让本机 agent 阅读 `~/agents/sync/sync_agent_config.md` 并按 §3 适配。
 
